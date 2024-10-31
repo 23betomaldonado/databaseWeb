@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter-like Homepage</title>
+    <style>
+        /* Global reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5ECE1;
+            display: flex;
+            color: #403D39;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            padding: 20px;
+            background-color: #CCC5B9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 2px solid #EB5E28;
+        }
+        .sidebar h2 {
+            color: #252422;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .tab {
+            width: 100%;
+            padding: 15px;
+            background-color: #EB5E28;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+        }
+        .tab:hover {
+            background-color: #403D39;
+        }
+
+        /* Main content area styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .main-content h2 {
+            color: #252422;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            display: none;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .active {
+            display: block;
+        }
+        
+        /* Feed styling */
+        .feed-item {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .feed-item h3 {
+            color: #EB5E28;
+            margin-bottom: 10px;
+        }
+        .feed-item p {
+            color: #403D39;
+        }
+
+        /* Interaction buttons styling */
+        .interaction-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .interaction-button {
+            cursor: pointer;
+            color: #EB5E28;
+        }
+        .interaction-button:hover {
+            color: #403D39;
+        }
+
+        /* User profile picture styling */
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        .user-profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <div class="tabs">
+            <div class="tab" onclick="showContent('home')">Home</div>
+            <div class="tab" onclick="showContent('Search')">Search</div>
+            <div class="tab" onclick="showContent('notifications')">Notifications</div>
+            <div class="tab" onclick="showContent('messages')">Messages</div>
+            <div class="tab" onclick="showContent('bookmarks')">Bookmarks</div>
+            <div class="tab" onclick="showContent('lists')">Lists</div>
+            <div class="tab" onclick="showContent('My Profile')">My Profile</div>
+            <div class="tab" onclick="showContent('more')">More</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h2>Welcome Home</h2>
+
+        <div id="home" class="content active">
+            <div class="feed-item">
+                <div class="user-profile">
+                    <img src="user_pfp.jpg" alt="User Profile Picture" onclick="showProfile()">
+                    <h3>UNI-VERSE</h3>
+                </div>
+                <p>Welcome user!</p>
+                <div class="interaction-buttons">
+                    <span class="interaction-button" onclick="likePost()">❤️ Like (<span id="like-count">0</span>)</span>
+                    <span class="interaction-button" onclick="bookmarkPost()">🔖 Bookmark</span>
+                    <span class="interaction-button" onclick="commentPost()">💬 Comment</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="bookmarks" class="content">
+            <div class="feed-item">
+                <h3>Bookmarks</h3>
+                <div id="bookmarked-posts"></div>
+            </div>
+        </div>
+
+        <!-- Other sections omitted for brevity -->
+    </div>
+
+    <script>
+        let likeCount = 0;
+        let bookmarkedPosts = [];
+
+        function showContent(id) {
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function likePost() {
+            likeCount++;
+            document.getElementById('like-count').textContent = likeCount;
+            // Here, you can also trigger a notification if needed
+        }
+
+        function bookmarkPost() {
+            const postContent = document.querySelector('.feed-item p').textContent;
+            bookmarkedPosts.push(postContent);
+            alert('Post bookmarked!');
+            displayBookmarks();
+        }
+
+        function displayBookmarks() {
+            const bookmarksContainer = document.getElementById('bookmarked-posts');
+            bookmarksContainer.innerHTML = ''; // Clear existing bookmarks
+            bookmarkedPosts.forEach((post, index) => {
+                bookmarksContainer.innerHTML += `<p>${post} <button onclick="removeBookmark(${index})">Remove</button></p>`;
+            });
+        }
+
+        function removeBookmark(index) {
+            bookmarkedPosts.splice(index, 1);
+            displayBookmarks();
+        }
+
+        function commentPost() {
+            alert('Comment functionality coming soon!');
+        }
+
+        function showProfile() {
+            alert('User profile page coming soon!');
+        }
+    </script>
+</body>
+</html>
